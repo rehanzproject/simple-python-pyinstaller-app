@@ -7,8 +7,8 @@ node {
         stage('Build') {
             dockerImage = docker.image(pyCompileImage)
             dockerImage.pull()
-            dockerImage.inside {
-                sh 'python -m py_compile sources/add2vals.py sources/calc.py'
+            dockerImage.inside('-v /var/jenkins_home/workspace:/workspace -w /workspace') {
+               sh 'python -m py_compile sources/add2vals.py sources/calc.py'
             }
         }
 
