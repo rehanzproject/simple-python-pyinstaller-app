@@ -20,14 +20,15 @@ node {
         input message: 'Do you want to proceed with the deployment?', ok: 'Approve'
     }
 
-    stage('Deploy') {
-        docker.image('python:2-alpine').inside {
-           sh '''
-            mkdir -p /tmp/app
-            cp -r ./sources /tmp/app
-            nohup python /tmp/app/add2vals.py > /tmp/app/app.log 2>&1 &
-            cp -r /tmp/app/* $WORKSPACE/app/
-           '''
-        }
+   stage('Deploy') {
+    docker.image('python:2-alpine').inside {
+        sh '''
+        mkdir -p /tmp/app
+        cp -r ./sources /tmp/app
+        nohup python /tmp/app/add2vals.py > /tmp/app/app.log 2>&1 &
+        '''
     }
+    archiveArtifacts artifacts: 'app/**', fingerprint: true
+}
+
 }
