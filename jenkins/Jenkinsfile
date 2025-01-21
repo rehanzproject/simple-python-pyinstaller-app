@@ -22,11 +22,11 @@ node {
 
     stage('Deploy') {
         docker.image('python:2-alpine').inside {
-            sh '''
-            mkdir -p /opt/app
-            cp -r ./sources /opt/app
-            nohup python /opt/app/add2vals.py > app.log 2>&1 &
-            '''
+           sh '''
+            mkdir -p /workspace/app
+            cp -r ./sources /workspace/app
+            nohup python /workspace/app/add2vals.py > app.log 2>&1 &
+           '''
         }
     }
 }
