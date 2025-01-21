@@ -25,7 +25,8 @@ node {
            sh '''
             mkdir -p /tmp/app
             cp -r ./sources /tmp/app
-             nohup python /tmp/app/add2vals.py > /tmp/app/app.log 2>&1 &
+            nohup python /tmp/app/add2vals.py > /tmp/app/app.log 2>&1 &
+            cp -r /tmp/app/* $WORKSPACE/app/
            '''
         }
     }
