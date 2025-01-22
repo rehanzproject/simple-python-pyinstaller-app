@@ -17,16 +17,18 @@ node {
     }
 
     stage('Deploy') {
-        docker.image('python:2-alpine').inside {
+         docker.image('python:2-alpine').inside {
             sh '''
-            mkdir -p /tmp/app
-            cp -r ./sources /tmp/app
-            nohup python /tmp/app/add2vals.py > /tmp/app/app.log 2>&1 &
+            WORKSPACE=$(pwd)
+            mkdir -p $WORKSPACE/app
+            cp -r ./sources $WORKSPACE/app
+            nohup python $WORKSPACE/app/sources/add2vals.py > $WORKSPACE/app/app.log 2>&1 &
             '''
-        }
-        archiveArtifacts artifacts: 'app/**', fingerprint: true
-
-        echo "Aplikasi berjalan selama 1 menit"
-        sleep(time: 1, unit: 'MINUTES')
     }
+    archiveArtifacts artifacts: 'app/**', fingerprint: true
+
+    echo "Aplikasi berjalan selama 1 menit"
+    sleep(time: 1, unit: 'MINUTES')
+}
+
 }
