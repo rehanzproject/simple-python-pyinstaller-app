@@ -16,19 +16,17 @@ node {
         junit 'test-reports/results.xml'
     }
 
-    stage('ManualApproval') {
-        input message: 'Do you want to proceed with the deployment?', ok: 'Approve'
-    }
+    stage('Deploy') {
+        docker.image('python:2-alpine').inside {
+            sh '''
+            mkdir -p /tmp/app
+            cp -r ./sources /tmp/app
+            nohup python /tmp/app/add2vals.py > /tmp/app/app.log 2>&1 &
+            '''
+        }
+        archiveArtifacts artifacts: 'app/**', fingerprint: true
 
-   stage('Deploy') {
-    docker.image('python:2-alpine').inside {
-        sh '''
-        mkdir -p /tmp/app
-        cp -r ./sources /tmp/app
-        nohup python /tmp/app/add2vals.py > /tmp/app/app.log 2>&1 &
-        '''
+        echo "Aplikasi berjalan selama 1 menit"
+        sleep(time: 1, unit: 'MINUTES')
     }
-    archiveArtifacts artifacts: 'app/**', fingerprint: true
-}
-
 }
